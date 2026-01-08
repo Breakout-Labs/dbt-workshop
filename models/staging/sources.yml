@@ -1,0 +1,12 @@
+sources:
+  - name: banking
+    schema: raw_banking
+    database: breakout-labs-training
+    tables:
+      - name: banks
+        description: Information about our banks
+        columns:
+          - name: id
+            description: '{{ doc("bank_id") }}'
+      - name: customers
+      - name: loan_decisions
