@@ -4,9 +4,10 @@ sources:
     database: breakout-labs-training
     tables:
       - name: banks
-        description: Information about our banks
+        description: Bank data from the banking source, including their unique identifiers, names and associated countries.
         columns:
           - name: id
             description: '{{ doc("bank_id") }}'
       - name: customers
+        description: Customer data from the banking source, including personal details and timestamps for record creation and updates.
       - name: loan_decisions
