@@ -1,3 +1,3 @@
 {% docs bank_id %}
-A unique bank ID.
+A unique identifier for each bank.
 {% enddocs %}
