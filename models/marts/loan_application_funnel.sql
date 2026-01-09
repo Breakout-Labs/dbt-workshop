@@ -15,10 +15,12 @@ decisions as (
 latest_decision as (
     select
         application_id,
+
         case
             when decision_status is not null then decision_status
-            else 'under_review'
+            else 'under_review' -- If no decision, then application is still under review
         end as latest_decision_status,
+
         approved_amount as latest_approved_amount,
         decision_at as latest_decision_at
     from applications
