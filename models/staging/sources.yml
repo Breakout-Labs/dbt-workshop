@@ -8,7 +8,97 @@ sources:
         columns:
           - name: id
             description: '{{ doc("bank_id") }}'
+            data_tests:
+              - not_null
+              - unique
       - name: customers
         description: Customer data from the banking source, including personal details and timestamps for record creation and updates.
+        columns:
+          - name: id
+            data_tests:
+              - not_null
+              - unique
+          - name: bank_id
+            data_tests:
+              - relationships:
+                  arguments:
+                    to: source('banking', 'banks')
+                    field: id
+          - name: created_ts
+            data_tests:
+              - not_null
+          - name: updated_ts
+            data_tests:
+              - not_null
+          - name: _synced_ts
+            data_tests:
+              - not_null
       - name: loan_decisions
+        columns:
+          - name: id
+            data_tests:
+              - not_null
+              - unique
+          - name: application_id
+            data_tests:
+              - relationships:
+                  arguments:
+                    to: source('banking', 'loan_applications')
+                    field: id
+          - name: decision_status
+            data_tests:
+              - accepted_values:
+                  values: ['approved', 'rejected']
+          - name: reason
+            data_tests:
+              - not_null:
+                  config:
+                    where: "decision_status = 'rejected'"
+          - name: approved_amount
+            data_tests:
+              - not_null:
+                  config:
+                    where: "decision_status = 'approved'"
+          - name: decision_ts
+            data_tests:
+              - not_null
+          - name: updated_ts
+            data_tests:
+              - not_null
+          - name: _synced_ts
+            data_tests:
+              - not_null
       - name: loan_applications
+        columns:
+          - name: id
+            data_tests:
+              - not_null
+              - unique
+          - name: customer_id
+            data_tests:
+              - relationships:
+                  arguments:
+                    to: source('banking', 'customers')
+                    field: id
+          - name: bank_id
+            data_tests:
+              - relationships:
+                  arguments:
+                    to: source('banking', 'banks')
+                    field: id
+          - name: loan_type
+            data_tests:
+              - accepted_values:
+                  values: ['mortgage', 'auto', 'personal']
+          - name: requested_amount
+            data_tests:
+              - not_null
+          - name: submitted_ts
+            data_tests:
+              - not_null
+          - name: updated_ts
+            data_tests:
+              - not_null
+          - name: _synced_ts
+            data_tests:
+              - not_null
