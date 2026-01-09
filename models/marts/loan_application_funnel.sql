@@ -46,7 +46,7 @@ aggregated as (
         loan_type,
 
         /* funnel time grain */
-        date_trunc(submitted_at, year) as year,
+        extract(year from submitted_at) as year,
 
         /* volume */
         count(*) as applications_submitted,
