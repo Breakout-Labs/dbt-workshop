@@ -15,13 +15,17 @@ decisions as (
 latest_decision as (
     select
         application_id,
-        decision_status as latest_decision_status,
+        case
+            when decision_status is not null then decision_status
+            else 'under_review'
+        end as latest_decision_status,
         approved_amount as latest_approved_amount,
         decision_at as latest_decision_at
-    from decisions
+    from applications
+    left join decisions using (application_id)
     qualify row_number() over (
         partition by application_id
-        order by decision_at desc
+        order by decisions.decision_at desc
     ) = 1
 ),
 
@@ -32,9 +36,11 @@ app_with_latest_decision as (
         latest_decision.latest_approved_amount,
         latest_decision.latest_decision_at,
 
-        /* handy flags */
-        case when latest_decision.latest_decision_status = 'approved' then 1 else 0 end as is_approved,
-        case when latest_decision.latest_decision_status = 'rejected' then 1 else 0 end as is_rejected,
+         /* handy flags */
+        if(latest_decision.latest_decision_status = 'approved', 1, 0) as is_approved,
+        if(latest_decision.latest_decision_status = 'rejected', 1, 0) as is_rejected,
+        if(latest_decision.latest_decision_status = 'under_review', 1, 0) as is_under_review,
+
 
         /* turnaround time (days) */
         date_diff(latest_decision.latest_decision_at, applications.submitted_at, day) as decision_turnaround_days
@@ -54,6 +60,7 @@ aggregated as (
         count(*) as applications_submitted,
         sum(is_approved) as applications_approved,
         sum(is_rejected) as applications_rejected,
+        sum(is_under_review) as applications_under_review,
 
         /* rates */
         round( (sum(is_approved) / nullif(count(*), 0)) * 100, 2) as approval_rate_pct,
