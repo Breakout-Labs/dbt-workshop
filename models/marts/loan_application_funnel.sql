@@ -15,14 +15,12 @@ decisions as (
 latest_decision as (
     select
         application_id,
-
-        case
-            when decision_status is not null then decision_status
-            else 'under_review' -- If no decision, then application is still under review
-        end as latest_decision_status,
-
-        approved_amount as latest_approved_amount,
-        decision_at as latest_decision_at
+        coalesce(
+            decisions.decision_status,
+            'under_review'        -- No decision -> application still under review
+        ) as latest_decision_status,
+        decisions.approved_amount as latest_approved_amount,
+        decisions.decision_at as latest_decision_at
     from applications
     left join decisions using (application_id)
     qualify row_number() over (
