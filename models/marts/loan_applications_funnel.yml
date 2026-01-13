@@ -1,0 +1,62 @@
+models:
+- name: loan_applications_funnel
+  description: This model aggregates loan application data to provide insights into
+    the loan application process, including submission volumes, approval rates, and
+    decision turnaround times. It combines data from loan applications and decisions
+    to create a comprehensive view of the loan application funnel, segmented by bank
+    and loan type.
+  columns:
+  - name: bank_id
+    description: Identifier for the bank associated with the loan application.
+    data_tests:
+      - not_null
+  - name: loan_type
+    description: Type of loan applied for.
+    data_tests:
+      - not_null
+  - name: year
+    description: Year the loan application was submitted.
+    data_tests:
+      - not_null
+  - name: applications_submitted
+    description: Total number of loan applications submitted.
+    data_tests:
+      - not_null
+  - name: applications_approved
+    description: Total number of loan applications approved.
+    data_tests:
+      - not_null
+  - name: applications_rejected
+    description: Total number of loan applications rejected.
+    data_tests:
+      - not_null
+  - name: applications_under_review
+    description: Total number of loan applications still under review.
+    data_tests:
+      - not_null
+  - name: approval_rate_pct
+    description: Percentage of loan applications that were approved.
+    data_tests:
+      - not_null
+  - name: total_requested_amount
+    description: Total amount of money requested in loan applications.
+    data_tests:
+      - not_null
+  - name: total_approved_amount
+    description: Total amount of money approved for loans.
+    data_tests:
+      - not_null
+  - name: avg_requested_amount
+    description: Average amount of money requested per loan application.
+    data_tests:
+      - not_null
+  - name: avg_approved_amount
+    description: Average amount of money approved per loan application.
+    data_tests:
+      - not_null:
+          config:
+            where: "application_ammount > 0"
+  - name: avg_decision_turnaround_days
+    description: Average number of days taken to make a decision on loan applications.
+    data_tests:
+      - not_null
