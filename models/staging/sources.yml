@@ -11,3 +11,5 @@ sources:
       - name: customers
         description: Customer data from the banking source, including personal details and timestamps for record creation and updates.
       - name: loan_decisions
+      - name: loan_applications
+        description: Test lab 1 for loan applications.
