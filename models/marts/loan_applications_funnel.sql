@@ -86,7 +86,7 @@ aggregated as (
         /* Amounts */
         sum(requested_amount) as total_requested_amount,
         sum(coalesce(latest_approved_amount, 0)) as total_approved_amount,
-        round(avg(requested_amount)) as avg_requested_amount,
+        round(coalesce(avg(requested_amount), 0)) as avg_requested_amount,
         round(avg(latest_approved_amount)) as avg_approved_amount,
 
         /* Speed */

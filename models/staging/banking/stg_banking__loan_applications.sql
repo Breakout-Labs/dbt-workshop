@@ -26,3 +26,5 @@ renamed as (
 )
 
 select * from renamed
+
+-- {{ source('banking', 'customers') }}

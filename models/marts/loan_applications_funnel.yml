@@ -9,6 +9,7 @@ models:
     description: The unique identifier for the bank.
     data_tests:
       - not_null
+      - unique
   - name: loan_type
     description: The type of loan applied for.
     data_tests:
